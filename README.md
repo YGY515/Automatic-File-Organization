@@ -1,10 +1,10 @@
 # File-Organizer
 ### 1. 프로젝트 설명
-<b>FileOrganizer는 확장자, 날짜 그리고 파일명 언어에 따라 폴더 내 파일을 자동으로 정리하는 프로그램입니다.</b><br><br>
+<b>FileOrganizer는 확장자, 날짜, 파일명 언어에 따라 폴더 내 파일을 자동으로 정리하는 프로그램입니다.</b><br><br>
 <img width="60%" src="https://github.com/user-attachments/assets/a09b9238-d63a-47c8-be23-bf592e8bf851"><br>
 <b>시연 영상:</b> https://youtu.be/7ctBmCC3JPA <br></br>
-레포지토리 내 zip를 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>로 실행할 수 있습니다.<br>
-Core.exe는 콘솔로만 입출력이 이루어지고, WPF.exe는 윈도우 UI 프로그램으로 인터렉션이 가능합니다.<br>
+FileOrganizer_v1.0.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>으로 실행할 수 있습니다.<br>
+* Core.exe는 콘솔로만 입출력이 이루어지고, WPF.exe는 윈도우 UI 프로그램으로 인터렉션이 가능합니다.<br>
 <br>
 <br>
 
@@ -59,9 +59,9 @@ graph TD
 사용자가 입력한 폴더 경로와 정리 기준을 바탕으로 파일을 분석하고, 기준에 따라 폴더를 생성한 뒤 파일을 이동시킵니다.<br>
 
 FileOrganizer_Base 추상 클래스를 중심으로 공통적인 파일 정리 기능을 정의하고,<br>
-Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용을 구현했습니다.
+Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용을 구현했습니다.<br>
 
-이를 통해 정리 기준이 추가되더라도 새로운 클래스를 작성하여 쉽게 확장할 수 있도록 설계했습니다.<br>
+정리 기준이 추가되더라도 새로운 클래스를 작성하여 쉽게 <b>확장</b>할 수 있도록 설계했습니다.<br>
 <br>
 ### 2) FileOrganization_WPF
 
@@ -73,3 +73,5 @@ Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용
 * 정리된 폴더 탐색기 열기
 
 등의 UI를 제공하며, 실제 프로그램 로직은 FileOrganization_Core의 클래스를 그대로 호출하여 사용합니다.<br>
+
+이를 통해 UI와 핵심 로직을 분리하고 프로그램의 사용의 <b>접근성</b>을 개선했습니다.<br>
