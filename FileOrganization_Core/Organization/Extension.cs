@@ -20,7 +20,10 @@ namespace FileOrganization_Core.Organization
             CollectFiles();
             CreateFolders();
             MoveFiles(token, progress);
-            
+
+            FileCount = _count;
+            FolderCount = fileList.Count;
+
             return PrintLog(_count, fileList.Count);
         }
 
@@ -83,7 +86,7 @@ namespace FileOrganization_Core.Organization
             {
                 for (int i = moveLog.Count - 1; i >= 0; i--)
                 {
-                    File.Move(moveLog[i].from, moveLog[i].to, true);
+                    File.Move(moveLog[i].to, moveLog[i].from, true);
                 }
                 throw;
             }

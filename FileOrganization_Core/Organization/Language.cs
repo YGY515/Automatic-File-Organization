@@ -18,7 +18,10 @@
             CollectFiles();
             CreateFolders();
             MoveFiles(token, progress);
-            
+
+            FileCount = _count;
+            FolderCount = fileList.Count;
+
             return PrintLog(_count, fileList.Count); 
         }
 
@@ -27,10 +30,14 @@
             foreach (var file in files)
             {
                 _count++;
-                string lang = Path.GetFileNameWithoutExtension(file);
+                string info = Path.GetFileNameWithoutExtension(file);
+                string lang = "Etc";
 
-                if (lang[0] >= '가' && lang[0] <= '힣') lang = "Korean";
-                else if (lang[0] >= 'a' && lang[0] <= 'z') lang = "English";
+                if (info.Length > 0)
+                {
+                    if (info[0] >= '가' && info[0] <= '힣') lang = "Korean";
+                    else if ((info[0] >= 'a' && info[0] <= 'z') || (info[0] >= 'A' && info[0] <= 'Z')) lang = "English";
+                }
 
                 fileList.Add(lang);
             }
@@ -59,10 +66,13 @@
                     try
                     {
                         string info = Path.GetFileNameWithoutExtension(file);
-                        string lang = "";
+                        string lang = "Etc";
 
-                        if (lang[0] >= '가' && lang[0] <= '힣') lang = "Korean";
-                        else if (lang[0] >= 'a' && lang[0] <= 'z') lang = "English";
+                        if (info.Length > 0)
+                        {
+                            if (info[0] >= '가' && info[0] <= '힣') lang = "Korean";
+                            else if ((info[0] >= 'a' && info[0] <= 'z' ) || (info[0] >= 'A' && info[0] <= 'Z')) lang = "English";
+                        }
                         Thread.Sleep(2000);  //취소 테스트용
 
                         string destFolder = Path.Combine(_path, lang);
@@ -87,7 +97,7 @@
             {
                 for (int i = moveLog.Count - 1; i >= 0; i--)
                 {
-                    File.Move(moveLog[i].from, moveLog[i].to, true);
+                    File.Move(moveLog[i].to, moveLog[i].from, true);
                 }
                 throw;
             }

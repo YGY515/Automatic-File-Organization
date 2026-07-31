@@ -10,7 +10,7 @@ namespace FileOrganization_Core.Organization
 
         HashSet<string> fileList = new HashSet<string>();
         List<String> files = new List<string>();
-        List<(string to, string from)> moveLog = new List<(string, string)>();
+        List<(string from, string to)> moveLog = new List<(string, string)>();
 
         public override string Organize(string path, CancellationToken token, IProgress<int> progress = null)
         {
@@ -20,6 +20,9 @@ namespace FileOrganization_Core.Organization
             CollectFiles();
             CreateFolders();
             MoveFiles(token, progress);
+
+            FileCount = _count;
+            FolderCount = fileList.Count;
             
             return PrintLog(_count, fileList.Count);
         }
@@ -74,6 +77,14 @@ namespace FileOrganization_Core.Organization
                         int current = Interlocked.Increment(ref done);
                         progress?.Report(1);
                     }
+                    catch (OperationCanceledException)
+                    {
+                        for (int i = moveLog.Count - 1; i >= 0; i--)
+                        {
+                            File.Move(moveLog[i].from, moveLog[i].to, true);
+                        }
+                        throw;
+                    }
                     finally
                     {
                         semaphore.Release();
@@ -84,7 +95,7 @@ namespace FileOrganization_Core.Organization
             {
                 for(int i = moveLog.Count - 1; i >= 0; i--)
                 {
-                    File.Move(moveLog[i].from, moveLog[i].to, true);
+                    File.Move(moveLog[i].to, moveLog[i].from, true);
                 }
                 throw;
             }
