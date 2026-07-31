@@ -1,5 +1,12 @@
 # File-Organizer
 
+1. [프로젝트 설명](https://github.com/YGY515/File-Organizer#1-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%84%A4%EB%AA%85-)<br>
+2. [프로젝트 기능](https://github.com/YGY515/File-Organizer#2-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%EB%8A%A5-%EF%B8%8F)<br>
+3. [프로젝트 구조](https://github.com/YGY515/File-Organizer#3-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B5%AC%EC%A1%B0-)<br>
+4. [개선 사항&문제 해결 경험](https://github.com/YGY515/File-Organizer#4-%EA%B0%9C%EC%84%A0-%EC%82%AC%ED%95%AD-%EB%B0%8F-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B2%BD%ED%97%98-)<br>
+5. [향후 계획](https://github.com/YGY515/File-Organizer#5-%ED%96%A5%ED%9B%84-%EA%B3%84%ED%9A%8D-)<br>
+<br>
+
 ### 1. 프로젝트 설명 🚩
 <img width="40%" src="https://github.com/user-attachments/assets/a09b9238-d63a-47c8-be23-bf592e8bf851"><br>
 <b>FileOrganizer는 확장자, 날짜, 파일명 언어에 따라 폴더 내 파일을 자동으로 정리하는 프로그램입니다.</b><br><br>
@@ -24,7 +31,7 @@ FileOrganizer_v2.1.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹�
 <br>
 
 ## 2. 프로젝트 기능 ✏️
-### 1) 기준에 따른 분류 - [해당 코드](https://github.com/YGY515/File-Organizer/tree/main/FileOrganization_Core/Organization)
+### 1) [기준에 따른 분류](https://github.com/YGY515/File-Organizer/tree/main/FileOrganization_Core/Organization)
 <img width="20%" src="https://github.com/user-attachments/assets/d4579d2e-0927-494c-87bd-e1936ecf4fc4"><br>
 정리 옵션을 <b>확장자</b>로 선택 시, 파일의 확장자에 따라 폴더를 생성하고 파일을 이동시킵니다.<br><br>
 <img width="40%" src="https://github.com/user-attachments/assets/0e939774-e277-4477-a0e7-d5f049d59388"><br>
@@ -45,7 +52,7 @@ FileOrganizer_v2.1.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹�
 콘솔에서는 텍스트로, WPF에서는 프로그레스 바와 별도 창으로 전체 작업 진행률을 실시간으로 확인할 수 있습니다.<br>
 <br>
 
-### 5) 정리 이력 서버 기록 - [해당 코드](https://github.com/YGY515/File-Organizer/blob/main/FileOrganization_Core/LogUploader.cs)
+### 5) [정리 이력 서버 기록](https://github.com/YGY515/File-Organizer/blob/main/FileOrganization_Core/LogUploader.cs)
 <img width="40%" src="https://github.com/user-attachments/assets/c5f52ec2-a1f5-441d-9e4d-f31740ee7059"><br>
 <img width="40%" src="https://github.com/user-attachments/assets/d836fa4c-68e6-467d-b15a-24074a536514"><br><br>
 정리가 끝나면 날짜, 정리 기준, 폴더 위치, 정리된 파일/폴더 총 개수, 취소 여부를 ASP.NET Core Web API로 전송해 <b>SQLite DB</b>에 기록합니다.<br>
@@ -105,8 +112,8 @@ graph TD
     DbCtx --> DB
 ```
 
-### 1) FileOrganization_Core
-파일 정리의 핵심 로직을 담당하는 콘솔 기반 프로그램입니다.<br>
+### 1) [FileOrganization_Core](https://github.com/YGY515/File-Organizer/tree/main/FileOrganization_Core)
+<b>파일 정리의 핵심 로직을 담당하는 콘솔 기반 프로그램입니다.</b><br>
 사용자가 입력한 폴더 경로와 정리 기준을 바탕으로 파일을 분석하고, 기준에 따라 폴더를 생성한 뒤 파일을 이동시킵니다.<br>
 
 FileOrganizerBase 추상 클래스를 중심으로 공통적인 파일 정리 기능을 정의하고,<br>
@@ -115,8 +122,8 @@ Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용
 정리가 완료되면(또는 취소되면) `LogUploader`가 `HttpClient`로 `FileOrganization_Api`에 결과를 전송합니다.<br>
 <br>
 
-### 2) FileOrganization_WPF
-Core의 기능을 손쉽게 Windows GUI 환경에서 사용할 수 있도록 확장한 프로그램입니다.
+### 2) [FileOrganization_WPF](https://github.com/YGY515/File-Organizer/tree/main/FileOrganization_WPF)
+<b>Core의 기능을 Windows GUI 환경에서 사용할 수 있도록 확장한 프로그램입니다.</b>
 
 * 폴더 선택
 * 정리 기준 선택(라디오 버튼)
@@ -129,14 +136,14 @@ Core의 기능을 손쉽게 Windows GUI 환경에서 사용할 수 있도록 확
 이를 통해 View와 핵심 로직을 분리하고, UI 없이도 Presenter의 판단 로직을 테스트할 수 있는 구조로 개선했습니다.<br>
 <br>
 
-### 3) FileOrganization_Api
-정리 이력을 저장하는 ASP.NET Core Web API 서버입니다.<br><br>
+### 3) [FileOrganization_Api](https://github.com/YGY515/File-Organizer/tree/main/FileOrganization_Api)
+<b>정리 이력을 저장하는 ASP.NET Core Web API 서버입니다.</b><br><br>
 `LogsController`가 `POST /api/logs` 요청을 받아 `AppDbContext`(EF Core)를 통해 SQLite DB(`organizeLogs.db`)에 이력을 저장합니다.<br>
 Core/WPF는 정리 기준, 정리 위치, 총 파일/폴더 개수, 취소 여부를 하나의 JSON으로 묶어 전송합니다.<br>
 <br>
 <br>
 
-## 4. 개선 사항 및 문제 해결 경험 🚨
+## 4. 개선 사항&문제 해결 경험 🚨
 
 ### 1) 파일 이동 병렬화 (Parallel.ForEach + SemaphoreSlim)
 파일이 수십만 개인 상황에서도 프로그램이 멈추지 않도록, 파일 이동 로직을 `Parallel.ForEach`로 병렬화했습니다.<br>
