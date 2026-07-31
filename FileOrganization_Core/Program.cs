@@ -1,12 +1,11 @@
-﻿using FileOrganization_Core;
+using FileOrganization_Core;
 using FileOrganization_Core.Organization;
-using System.Threading.Channels;
 
 class Program
 {
-    static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        GetDirectory();
+        await GetDirectory();
     }
 
     public class SyncProgress<T> : IProgress<T>
@@ -16,21 +15,22 @@ class Program
         public void Report(T value) => _handler(value);
     }
 
-    public static void GetDirectory()
+    public static async Task GetDirectory()
     {
-        string path = null;
+        string _path = null;
         Console.Write("파일 경로를 입력해주세요: ");
+
         while (true)
         {
-            path = Console.ReadLine();
+            _path = Console.ReadLine();
 
-            if (Directory.Exists(path) == true)
+            if (Directory.Exists(_path) == true)
             {
                 break;
             }
             else
             {
-                Console.WriteLine("올바른 경로를 입력해주세요");
+                Console.WriteLine("올바른 경로를 입력해주세요.");
             }
         }
 
@@ -41,40 +41,46 @@ class Program
         Console.WriteLine("ESC를 누르면 정리를 취소합니다.");
         string mode = Console.ReadLine();
 
-        var folders = new List<string>() { path };    // 입력한 경로의 모든 폴더
-        folders.AddRange(Directory.GetDirectories(path));
+        var folders = new List<string>() { _path };    // 입력한 경로의 모든 폴더
+        folders.AddRange(Directory.GetDirectories(_path));
         CancellationTokenSource cts = new CancellationTokenSource();
 
         Task.Run(() =>
         {
-            while(cts.IsCancellationRequested == false)
+            while (cts.IsCancellationRequested == false)
             {
                 if (Console.ReadKey(true).Key == ConsoleKey.Escape)
                 {
                     cts.Cancel();
-                    Console.WriteLine("취소되었습니다.");
+                    Console.WriteLine("작업을 취소하였습니다.");
                     break;
-                }    
+                }
             }
         });
 
+        // 진행률 표시 변수
         int totalFiles = folders.Sum(f => Directory.GetFiles(f).Length);
         int totalDone = 0;
         object progressLock = new object();
 
-        Parallel.ForEach(folders, folder =>
+        // 로그 전송용 변수
+        int totalFileCount = 0;
+        int totalFolderCount = 0;
+        bool wasCancelled = false;
+        int organizeMethod = mode switch { "확장자" => 1, "날짜" => 2, "언어" => 3, _ => 0 };
+
+        try
         {
-            // 폴더마다 새 인스턴스 생성
-            FileOrganizerBase organizer = mode switch
+            Parallel.ForEach(folders, folder =>
             {
-                "확장자" => new Extension(),
-                "날짜" => new Date(),
-                "언어" => new Language(),
-                _ => throw new NotImplementedException()
-            };
-            try
-            { 
-                // 진행율 표시
+                FileOrganizerBase organizer = mode switch
+                {
+                    "확장자" => new Extension(),
+                    "날짜" => new Date(),
+                    "언어" => new Language(),
+                    _ => throw new NotImplementedException()
+                };
+                // 진행률 표시
                 var progress = new SyncProgress<int>(_ =>
                 {
                     int current = Interlocked.Increment(ref totalDone);
@@ -86,12 +92,18 @@ class Program
                 });
 
                 string result = organizer.Organize(folder, cts.Token, progress);
+                Interlocked.Add(ref totalFileCount, organizer.FileCount);
+                Interlocked.Add(ref totalFolderCount, organizer.FolderCount);
+
                 Console.WriteLine($"[{folder}] {result}");
-            }
-            catch (OperationCanceledException)
-            {
-                Console.WriteLine($"[{folder}] 폴더 정리가 취소되었습니다.");
-            }
-        });
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            wasCancelled = true;
+            Console.WriteLine($"폴더 정리가 취소되었습니다.");
+        }
+
+        await LogUploader.SendLogAsync(_path, organizeMethod, totalFileCount, totalFolderCount, wasCancelled);
     }
 }
