@@ -12,13 +12,13 @@
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=flat&logo=sqlite&logoColor=white)
 
 <br>
-FileOrganizer_v2.0.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>으로 실행할 수 있습니다.<br>
-* Core.exe는 콘솔로만 입출력이 이루어지고, WPF.exe는 윈도우 UI 프로그램으로 인터렉션이 가능합니다.<br>
+FileOrganizer_v2.1.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>으로 실행할 수 있습니다.<br>
+* Core.exe는 콘솔로만, WPF.exe는 윈도우 UI 프로그램으로 인터렉션이 가능합니다.<br>
 <br><br>
 
 <b><업데이트 내역></b><br>
-**v2.1 업데이트**: **ASP.NET Core Web API + SQLite를 통한 정리 이력 서버 기록**을 적용했습니다. (자세한 내용은 4번 항목 참고)<br>
-**v2.0 업데이트**: 멀티스레딩 도입으로 대용량 파일 처리 속도 개선, 여러 폴더 동시 처리, 작업 취소 및 복구, 실시간 진행률 표시, MVP 아키텍처 리팩토링을 적용했습니다.
+**v2.1 업데이트**: **ASP.NET Core Web API + SQLite**를 통한 정리 이력 서버 기록을 적용했습니다.<br>
+**v2.0 업데이트**: 멀티스레딩 도입으로 대용량 파일 처리 속도 개선, 폴더 동시 처리, 작업 취소 및 복구, 진행률 표시, MVP 아키텍처를 적용했습니다.
 <br>
 <br>
 <br>
@@ -48,7 +48,7 @@ FileOrganizer_v2.0.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹�
 ### 5) 정리 이력 서버 기록 - [해당 코드](https://github.com/YGY515/File-Organizer/blob/main/FileOrganization_Core/LogUploader.cs)
 <img width="40%" src="https://github.com/user-attachments/assets/c5f52ec2-a1f5-441d-9e4d-f31740ee7059"><br>
 <img width="40%" src="https://github.com/user-attachments/assets/d836fa4c-68e6-467d-b15a-24074a536514"><br><br>
-정리가 끝나면 날짜, 정리 위치, 정리 기준, 정리된 파일/폴더 총 개수, 취소 여부를 ASP.NET Core Web API로 전송해 <b>SQLite DB</b>에 이력을 기록합니다.<br>
+정리가 끝나면 날짜, 정리 기준, 폴더 위치, 정리된 파일/폴더 총 개수, 취소 여부를 ASP.NET Core Web API로 전송해 <b>SQLite DB</b>에 기록합니다.<br>
 <br>
 <br>
 
@@ -112,8 +112,6 @@ graph TD
 FileOrganizerBase 추상 클래스를 중심으로 공통적인 파일 정리 기능을 정의하고,<br>
 Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용을 구현했습니다.<br>
 
-정리 기준이 추가되더라도 새로운 클래스를 작성하여 쉽게 확장할 수 있도록 설계했습니다.<br>
-
 정리가 완료되면(또는 취소되면) `LogUploader`가 `HttpClient`로 `FileOrganization_Api`에 결과를 전송합니다.<br>
 <br>
 
@@ -154,7 +152,7 @@ Core/WPF는 정리 기준, 정리 위치, 총 파일/폴더 개수, 취소 여�
 <br></br>
 ### 3) 작업 취소 및 자동 복구
 `CancellationToken`을 도입해 사용자가 언제든 정리 작업을 취소할 수 있도록 했습니다.<br>
-파일을 이동할 때마다 `(원본 경로, 이동 경로)`를 기록해두고, 취소 시 이 기록을 역순으로 되짚어 파일을 원래 위치로 복구합니다.
+파일을 이동할 때마다 원본 경로, 이동 경로를 기록해두고, 취소 시 이 기록을 역순으로 되짚어 파일을 원래 위치로 복구합니다.
 > 폴더 단위 병렬 반복문(`Parallel.ForEach`)에 취소 토큰을 물려주지 않으면, 내부에서 발생한 `OperationCanceledException`이 `AggregateException`으로 감싸져 상위 `catch` 블록에서 잡히지 않는 문제가 있었습니다. 모든 병렬 반복문에 동일한 `CancellationToken`을 일관되게 전달해 해결했습니다.
 
 <br></br>
