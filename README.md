@@ -4,11 +4,11 @@
 2. [프로젝트 기능](https://github.com/YGY515/File-Organizer#2-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%EB%8A%A5-%EF%B8%8F)<br>
 3. [프로젝트 구조](https://github.com/YGY515/File-Organizer#3-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B5%AC%EC%A1%B0-)<br>
 4. [개선 사항&문제 해결 경험](https://github.com/YGY515/File-Organizer#4-%EA%B0%9C%EC%84%A0-%EC%82%AC%ED%95%AD-%EB%B0%8F-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B2%BD%ED%97%98-)<br>
-5. [향후 계획](https://github.com/YGY515/File-Organizer#5-%ED%96%A5%ED%9B%84-%EA%B3%84%ED%9A%8D-)<br>
+5. [프로젝트 회고](https://github.com/YGY515/File-Organizer#5-%ED%96%A5%ED%9B%84-%EA%B3%84%ED%9A%8D-)<br>
 <br>
 
 ### 1. 프로젝트 설명 🚩
-<img width="40%" src="https://github.com/user-attachments/assets/a09b9238-d63a-47c8-be23-bf592e8bf851"><br>
+<img width="50%" src="https://github.com/user-attachments/assets/6b67dfdc-7007-4320-8116-8981d8ea0f0f"><br>
 <b>FileOrganizer는 확장자, 날짜, 파일명 언어에 따라 폴더 내 파일을 자동으로 정리하는 프로그램입니다.</b><br><br>
 <b>사용 기술: </b>
 ![C#](https://img.shields.io/badge/C%23-239120?style=flat&logo=csharp&logoColor=white)
@@ -19,12 +19,13 @@
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=flat&logo=sqlite&logoColor=white)
 
 <br>
-FileOrganizer_v2.1.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>으로 실행할 수 있습니다.<br>
+FileOrganizer_v2.2.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>으로 실행할 수 있습니다.<br>
 * Core.exe는 콘솔로만, WPF.exe는 윈도우 UI 프로그램으로 인터렉션이 가능합니다.<br>
 <br><br>
 
 <b><업데이트 내역></b><br>
-**v2.1 업데이트**: **ASP.NET Core Web API + SQLite**를 통한 정리 이력 서버 기록을 적용했습니다.<br>
+**v2.2 업데이트**: WPF 창에서 정리 이력을 조회하는 기능을 추가했습니다.<br>
+**v2.1 업데이트**: ASP.NET Core Web API + SQLite를 통한 정리 이력 서버 기록을 적용했습니다.<br>
 **v2.0 업데이트**: 멀티스레딩 도입으로 대용량 파일 처리 속도 개선, 폴더 동시 처리, 작업 취소 및 복구, 진행률 표시, MVP 아키텍처를 적용했습니다.
 <br>
 <br>
@@ -53,10 +54,12 @@ FileOrganizer_v2.1.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹�
 <br>
 
 ### 5) [정리 이력 서버 기록](https://github.com/YGY515/File-Organizer/blob/main/FileOrganization_Core/LogUploader.cs)
-<img width="40%" src="https://github.com/user-attachments/assets/c5f52ec2-a1f5-441d-9e4d-f31740ee7059"><br>
-<img width="40%" src="https://github.com/user-attachments/assets/d836fa4c-68e6-467d-b15a-24074a536514"><br><br>
+<img width="40%" src="https://github.com/user-attachments/assets/c5f52ec2-a1f5-441d-9e4d-f31740ee7059">
+<img width="40%" src="https://github.com/user-attachments/assets/d836fa4c-68e6-467d-b15a-24074a536514"><br>
 정리가 끝나면 날짜, 정리 기준, 폴더 위치, 정리된 파일/폴더 총 개수, 취소 여부를 ASP.NET Core Web API로 전송해 <b>SQLite DB</b>에 기록합니다.<br>
-<br>
+<br><br>
+<img width="40%" src="https://github.com/user-attachments/assets/3202991a-488b-48e7-960b-6c7097b4e8e0"><br>
+혹은 WPF 창에서 '정리 이력 조회'로 DB에 기록된 데이터를 확인할 수 있습니다.<br>
 <br>
 
 ## 3. 프로젝트 구조 📂
@@ -66,6 +69,8 @@ graph TD
         XAML[FileOrganization.xaml]
         CS[FileOrganization.xaml.cs]
         PW[ProgressWindow.xaml / .xaml.cs]
+        LW[LogsWindow.xaml / .xaml.cs]
+        Dto[OrganizeLogDto.cs]
     end
 
     subgraph "FileOrganization_WPF (Presenter)"
@@ -98,6 +103,7 @@ graph TD
     Presenter --> PW
     Presenter --> IView
     Presenter --> Base
+    Presenter -->|이력 창 호출| LW
 
     Prog --> Base
 
@@ -108,6 +114,9 @@ graph TD
     Prog --> Uploader
     Presenter --> Uploader
     Uploader -->|HTTPS POST /api/logs| Controller
+
+    LW --> Dto
+    LW -->|HTTPS GET /api/logs?cancelled=| Controller
     Controller --> DbCtx
     DbCtx --> DB
 ```
@@ -130,6 +139,7 @@ Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용
 * 정리 진행률 표시 및 취소
 * 정리 결과 확인
 * 정리된 폴더 탐색기 열기
+* 정리 이력 조회
 
 **MVP(Model-View-Presenter)** 패턴을 적용하여, View(`xaml.cs`)는 Core 로직을 전혀 알지 못하고 `IMainView` 인터페이스를 통해서만 Presenter와 소통합니다. Presenter(`MainPresenter.cs`)가 어떤 정리 기준을 쓸지 판단하고 Core를 직접 호출하는 역할을 전담합니다.<br>
 
@@ -183,7 +193,8 @@ Core/WPF는 정리 기준, 정리 위치, 총 파일/폴더 개수, 취소 여�
 > ③: 작업 취소 시 바깥쪽 폴더 반복문에 `CancellationToken`이 연결되어 있지 않아 `AggregateException`이 발생했고, 이로 인해 취소된 작업은 로그 전송 코드까지 도달하지 못하는 문제가 있었습니다. 폴더 반복문에도 동일한 토큰을 가진 `ParallelOptions`를 전달하고, 취소 여부를 별도 플래그로 기록해 취소된 경우에도 정상적으로 이력이 남도록 개선했습니다.
 
 <br></br>
-## 5. 향후 계획 📌
-- WPF에 정리 이력 조회 화면 추가 (기간/취소 여부별 필터링)
-
+## 5. 프로젝트 회고 📌
+- 일상에서 수많은 파일을 정리하는 단순한 문제에서 출발했지만, 기능을 하나씩 추가할 때마다 생각보다 훨씬 많은 개념과 마주하게 되었습니다.
+- 개선을 거듭하여 멀티스레딩, 아키텍처 패턴, REST API/DB 연동까지 다뤄보는 프로젝트로 확장하며, 코드가 어떻게 동작하고 어떤 기능을 하는지 설명할 수 있는 중요성을 깨닫았습니다.
+  
 <br>
