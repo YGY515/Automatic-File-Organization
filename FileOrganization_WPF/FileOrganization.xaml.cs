@@ -45,6 +45,11 @@ public partial class MainWindow : Window, IMainView
         _presenter.OnOrganizeClicked();
     }
 
+    private void ShowLog(object sender, RoutedEventArgs e)
+    {
+        _presenter.ShowLog();
+    }
+
     public void ShowResult(string message)
     {
         var dialoug = System.Windows.MessageBox.Show(

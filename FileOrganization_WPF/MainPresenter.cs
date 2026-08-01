@@ -1,4 +1,4 @@
-using FileOrganization_Core;
+﻿using FileOrganization_Core;
 using FileOrganization_Core.Organization;
 using System.IO;
 
@@ -103,5 +103,10 @@ class MainPresenter
     {
         if (cts != null)
             cts.Cancel();
+    }
+    public void ShowLog()
+    {
+        var logsWindow = new LogsWindow();
+        logsWindow.Show();
     }
 }
