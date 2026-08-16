@@ -3,8 +3,8 @@
 1. [프로젝트 설명](https://github.com/YGY515/File-Organizer#1-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%84%A4%EB%AA%85-)<br>
 2. [프로젝트 기능](https://github.com/YGY515/File-Organizer#2-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%EB%8A%A5-%EF%B8%8F)<br>
 3. [프로젝트 구조](https://github.com/YGY515/File-Organizer#3-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B5%AC%EC%A1%B0-)<br>
-4. [개선 사항&문제 해결 경험](https://github.com/YGY515/File-Organizer#4-%EA%B0%9C%EC%84%A0-%EC%82%AC%ED%95%AD-%EB%B0%8F-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B2%BD%ED%97%98-)<br>
-5. [프로젝트 회고](https://github.com/YGY515/File-Organizer#5-%ED%96%A5%ED%9B%84-%EA%B3%84%ED%9A%8D-)<br>
+4. [개선 사항&문제 해결 경험](https://github.com/YGY515/File-Organizer#4-%EA%B0%9C%EC%84%A0-%EC%82%AC%ED%95%AD%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0-%EA%B2%BD%ED%97%98-)<br>
+5. [프로젝트 회고](https://github.com/YGY515/File-Organizer#5-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%ED%9A%8C%EA%B3%A0-)<br>
 <br>
 
 ### 1. 프로젝트 설명 🚩
