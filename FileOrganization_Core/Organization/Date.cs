@@ -77,14 +77,6 @@ namespace FileOrganization_Core.Organization
                         int current = Interlocked.Increment(ref done);
                         progress?.Report(1);
                     }
-                    catch (OperationCanceledException)
-                    {
-                        for (int i = moveLog.Count - 1; i >= 0; i--)
-                        {
-                            File.Move(moveLog[i].from, moveLog[i].to, true);
-                        }
-                        throw;
-                    }
                     finally
                     {
                         semaphore.Release();
