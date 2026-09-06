@@ -18,11 +18,7 @@
 ![EF Core](https://img.shields.io/badge/EF%20Core-512BD4?style=flat&logo=nuget&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-07405E?style=flat&logo=sqlite&logoColor=white)
 
-<br>
-FileOrganizer_v2.2.zip을 다운로드 후 <b>FileOrganization_Core.exe</b> 혹은 <b>FileOrganization_WPF.exe</b>으로 실행할 수 있습니다.<br>
-* Core.exe는 콘솔로만, WPF.exe는 윈도우 UI 프로그램으로 인터렉션이 가능합니다.<br>
-<br><br>
-
+<br></br>
 <b><업데이트 내역></b><br>
 **v2.2 업데이트**: WPF 창에서 정리 이력을 조회하는 기능을 추가했습니다.<br>
 **v2.1 업데이트**: ASP.NET Core Web API + SQLite를 통한 정리 이력 서버 기록을 적용했습니다.<br>
@@ -148,7 +144,7 @@ Organization 폴더의 각 클래스에서 정리 기준에 따른 세부 내용
 
 ### 3) [FileOrganization_Api](https://github.com/YGY515/File-Organizer/tree/main/FileOrganization_Api)
 <b>정리 이력을 저장하는 ASP.NET Core Web API 서버입니다.</b><br><br>
-`LogsController`가 `POST /api/logs` 요청을 받아 `AppDbContext`(EF Core)를 통해 SQLite DB(`organizeLogs.db`)에 이력을 저장합니다.<br>
+`LogsController`가 `POST` 요청을 받아 `AppDbContext`(EF Core)를 통해 SQLite DB(`organizeLogs.db`)에 이력을 저장합니다.<br>
 Core/WPF는 정리 기준, 정리 위치, 총 파일/폴더 개수, 취소 여부를 하나의 JSON으로 묶어 전송합니다.<br>
 <br>
 <br>
